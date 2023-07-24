@@ -8,6 +8,7 @@
 #import "MainViewController.h"
 #import "BeachCell.h"
 #import "DataManager.h"
+#import "ServiceManager.h"
 
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -23,6 +24,7 @@
     [super viewDidLoad];
     
     self.dataManager = [DataManager shared];
+    [[ServiceManager new] request];
     [self setUI];
 }
 
