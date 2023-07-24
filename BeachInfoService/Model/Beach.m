@@ -9,4 +9,14 @@
 
 @implementation Beach
 
+- (instancetype)initWithBeachNum:(int)beachNum
+                       beachName:(NSString *)beachName {
+    self = [super init];
+    if (self) {
+        _beachNum = beachNum;
+        _beachName = beachName;
+    }
+    return self;
+}
+
 @end
