@@ -18,6 +18,7 @@
 		332D4A7F2A6E532E006904D1 /* BeachCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A7D2A6E532E006904D1 /* BeachCell.m */; };
 		332D4A802A6E532E006904D1 /* BeachCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 332D4A7E2A6E532E006904D1 /* BeachCell.xib */; };
 		332D4A832A6E597D006904D1 /* Beach.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A822A6E597D006904D1 /* Beach.m */; };
+		332D4A8B2A6E5C7F006904D1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A8A2A6E5C7F006904D1 /* MainViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,8 @@
 		332D4A7E2A6E532E006904D1 /* BeachCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BeachCell.xib; sourceTree = "<group>"; };
 		332D4A812A6E597D006904D1 /* Beach.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beach.h; sourceTree = "<group>"; };
 		332D4A822A6E597D006904D1 /* Beach.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Beach.m; sourceTree = "<group>"; };
+		332D4A892A6E5C7F006904D1 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		332D4A8A2A6E5C7F006904D1 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +105,8 @@
 			children = (
 				332D4A642A6E4A65006904D1 /* ViewController.h */,
 				332D4A652A6E4A65006904D1 /* ViewController.m */,
+				332D4A892A6E5C7F006904D1 /* MainViewController.h */,
+				332D4A8A2A6E5C7F006904D1 /* MainViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -208,6 +213,7 @@
 				332D4A662A6E4A65006904D1 /* ViewController.m in Sources */,
 				332D4A792A6E4A8E006904D1 /* DataManager.m in Sources */,
 				332D4A602A6E4A65006904D1 /* AppDelegate.m in Sources */,
+				332D4A8B2A6E5C7F006904D1 /* MainViewController.m in Sources */,
 				332D4A832A6E597D006904D1 /* Beach.m in Sources */,
 				332D4A712A6E4A67006904D1 /* main.m in Sources */,
 				332D4A632A6E4A65006904D1 /* SceneDelegate.m in Sources */,
