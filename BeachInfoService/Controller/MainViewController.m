@@ -7,10 +7,13 @@
 
 #import "MainViewController.h"
 #import "BeachCell.h"
+#import "DataManager.h"
 
 @interface MainViewController () <UITableViewDataSource>
 
-@property (nonatomic, strong) UITableView* tableView;
+@property (nonatomic, strong) UITableView * tableView;
+
+@property (nonatomic, weak) DataManager * dataManager;
 
 @end
 
@@ -18,6 +21,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.dataManager = [DataManager shared];
     [self setUI];
 }
 
@@ -45,12 +50,12 @@
 //    UITableViewCell* cell = [UITableViewCell alloc] ini
     BeachCell* cell = (BeachCell *)[tableView dequeueReusableCellWithIdentifier:@"BeachCell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.label.text = @"test";
+    cell.label.text = [[[_dataManager allBeachList] objectAtIndex:indexPath.row] beachName];
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 30;
+    return [[_dataManager allBeachList] count];
 }
 
 @end
