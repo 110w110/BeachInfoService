@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) Beach * beach;
 
+- (instancetype)initWithBeach:(Beach *)beach;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -6,6 +6,7 @@
 //
 
 #import "MainViewController.h"
+#import "DetailViewController.h"
 #import "BeachCell.h"
 #import "DataManager.h"
 #import "ServiceManager.h"
@@ -32,6 +33,7 @@
 #pragma mark - UI
 - (void)setUI {
     self.title = @"해수욕장 정보조회 시스템";
+    [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
     
     self.tableView = [UITableView new];
     [_tableView registerNib:[UINib nibWithNibName:@"BeachCell" bundle:nil] forCellReuseIdentifier:@"BeachCell"];
@@ -66,6 +68,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%d %@", [[[_dataManager allBeachList] objectAtIndex:indexPath.row] beachNum], [[[_dataManager allBeachList] objectAtIndex:indexPath.row] beachName]);
+    DetailViewController * viewController = [[DetailViewController alloc] initWithBeach:[[_dataManager allBeachList] objectAtIndex:indexPath.row]];
+    [[self navigationController] pushViewController:viewController animated:true];
 }
 
 @end

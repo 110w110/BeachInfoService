@@ -21,6 +21,8 @@
 		332D4A8B2A6E5C7F006904D1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A8A2A6E5C7F006904D1 /* MainViewController.m */; };
 		332D4A8E2A6E6AE2006904D1 /* ServiceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A8D2A6E6AE2006904D1 /* ServiceManager.m */; };
 		332D4A912A6EA108006904D1 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A902A6EA108006904D1 /* DetailViewController.m */; };
+		332D4A972A6EA697006904D1 /* InfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A952A6EA697006904D1 /* InfoCell.m */; };
+		332D4A982A6EA697006904D1 /* InfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 332D4A962A6EA697006904D1 /* InfoCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +51,9 @@
 		332D4A8D2A6E6AE2006904D1 /* ServiceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ServiceManager.m; sourceTree = "<group>"; };
 		332D4A8F2A6EA108006904D1 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		332D4A902A6EA108006904D1 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		332D4A942A6EA697006904D1 /* InfoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfoCell.h; sourceTree = "<group>"; };
+		332D4A952A6EA697006904D1 /* InfoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InfoCell.m; sourceTree = "<group>"; };
+		332D4A962A6EA697006904D1 /* InfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InfoCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +150,9 @@
 				332D4A7C2A6E532E006904D1 /* BeachCell.h */,
 				332D4A7D2A6E532E006904D1 /* BeachCell.m */,
 				332D4A7E2A6E532E006904D1 /* BeachCell.xib */,
+				332D4A942A6EA697006904D1 /* InfoCell.h */,
+				332D4A952A6EA697006904D1 /* InfoCell.m */,
+				332D4A962A6EA697006904D1 /* InfoCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -207,6 +215,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				332D4A6E2A6E4A67006904D1 /* LaunchScreen.storyboard in Resources */,
+				332D4A982A6EA697006904D1 /* InfoCell.xib in Resources */,
 				332D4A802A6E532E006904D1 /* BeachCell.xib in Resources */,
 				332D4A6B2A6E4A67006904D1 /* Assets.xcassets in Resources */,
 				332D4A692A6E4A65006904D1 /* Main.storyboard in Resources */,
@@ -229,6 +238,7 @@
 				332D4A832A6E597D006904D1 /* Beach.m in Sources */,
 				332D4A712A6E4A67006904D1 /* main.m in Sources */,
 				332D4A632A6E4A65006904D1 /* SceneDelegate.m in Sources */,
+				332D4A972A6EA697006904D1 /* InfoCell.m in Sources */,
 				332D4A7F2A6E532E006904D1 /* BeachCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -372,7 +382,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 966SGMD852;
+				DEVELOPMENT_TEAM = 6W8N7TVCPJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BeachInfoService/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -400,7 +410,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 966SGMD852;
+				DEVELOPMENT_TEAM = 6W8N7TVCPJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BeachInfoService/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
