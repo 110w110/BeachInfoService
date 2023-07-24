@@ -17,6 +17,7 @@
 		332D4A792A6E4A8E006904D1 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A782A6E4A8E006904D1 /* DataManager.m */; };
 		332D4A7F2A6E532E006904D1 /* BeachCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A7D2A6E532E006904D1 /* BeachCell.m */; };
 		332D4A802A6E532E006904D1 /* BeachCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 332D4A7E2A6E532E006904D1 /* BeachCell.xib */; };
+		332D4A832A6E597D006904D1 /* Beach.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A822A6E597D006904D1 /* Beach.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,8 @@
 		332D4A7C2A6E532E006904D1 /* BeachCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BeachCell.h; sourceTree = "<group>"; };
 		332D4A7D2A6E532E006904D1 /* BeachCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BeachCell.m; sourceTree = "<group>"; };
 		332D4A7E2A6E532E006904D1 /* BeachCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BeachCell.xib; sourceTree = "<group>"; };
+		332D4A812A6E597D006904D1 /* Beach.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beach.h; sourceTree = "<group>"; };
+		332D4A822A6E597D006904D1 /* Beach.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Beach.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,24 +72,66 @@
 		332D4A5D2A6E4A65006904D1 /* BeachInfoService */ = {
 			isa = PBXGroup;
 			children = (
+				332D4A872A6E59B9006904D1 /* Data */,
+				332D4A862A6E59A4006904D1 /* Service */,
+				332D4A842A6E5980006904D1 /* Model */,
+				332D4A882A6E59E5006904D1 /* View */,
+				332D4A852A6E598E006904D1 /* Controller */,
 				332D4A5E2A6E4A65006904D1 /* AppDelegate.h */,
 				332D4A5F2A6E4A65006904D1 /* AppDelegate.m */,
 				332D4A612A6E4A65006904D1 /* SceneDelegate.h */,
 				332D4A622A6E4A65006904D1 /* SceneDelegate.m */,
-				332D4A772A6E4A8E006904D1 /* DataManager.h */,
-				332D4A782A6E4A8E006904D1 /* DataManager.m */,
-				332D4A642A6E4A65006904D1 /* ViewController.h */,
-				332D4A652A6E4A65006904D1 /* ViewController.m */,
-				332D4A7C2A6E532E006904D1 /* BeachCell.h */,
-				332D4A7D2A6E532E006904D1 /* BeachCell.m */,
-				332D4A7E2A6E532E006904D1 /* BeachCell.xib */,
-				332D4A672A6E4A65006904D1 /* Main.storyboard */,
 				332D4A6A2A6E4A67006904D1 /* Assets.xcassets */,
-				332D4A6C2A6E4A67006904D1 /* LaunchScreen.storyboard */,
 				332D4A6F2A6E4A67006904D1 /* Info.plist */,
 				332D4A702A6E4A67006904D1 /* main.m */,
 			);
 			path = BeachInfoService;
+			sourceTree = "<group>";
+		};
+		332D4A842A6E5980006904D1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				332D4A812A6E597D006904D1 /* Beach.h */,
+				332D4A822A6E597D006904D1 /* Beach.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		332D4A852A6E598E006904D1 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				332D4A642A6E4A65006904D1 /* ViewController.h */,
+				332D4A652A6E4A65006904D1 /* ViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		332D4A862A6E59A4006904D1 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		332D4A872A6E59B9006904D1 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				332D4A772A6E4A8E006904D1 /* DataManager.h */,
+				332D4A782A6E4A8E006904D1 /* DataManager.m */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		332D4A882A6E59E5006904D1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				332D4A672A6E4A65006904D1 /* Main.storyboard */,
+				332D4A6C2A6E4A67006904D1 /* LaunchScreen.storyboard */,
+				332D4A7C2A6E532E006904D1 /* BeachCell.h */,
+				332D4A7D2A6E532E006904D1 /* BeachCell.m */,
+				332D4A7E2A6E532E006904D1 /* BeachCell.xib */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +208,7 @@
 				332D4A662A6E4A65006904D1 /* ViewController.m in Sources */,
 				332D4A792A6E4A8E006904D1 /* DataManager.m in Sources */,
 				332D4A602A6E4A65006904D1 /* AppDelegate.m in Sources */,
+				332D4A832A6E597D006904D1 /* Beach.m in Sources */,
 				332D4A712A6E4A67006904D1 /* main.m in Sources */,
 				332D4A632A6E4A65006904D1 /* SceneDelegate.m in Sources */,
 				332D4A7F2A6E532E006904D1 /* BeachCell.m in Sources */,
