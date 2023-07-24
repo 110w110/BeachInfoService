@@ -100,9 +100,7 @@
         } else {
             // [상태 코드 확인]
             if(httpResponse.statusCode >= 200 && httpResponse.statusCode <= 300) {
-                
                 // [콜백 반환]
-                NSLog(@"%@", returnData);
                 completion(data);
             }
             else {

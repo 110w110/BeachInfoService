@@ -9,6 +9,7 @@
 #import "BeachCell.h"
 #import "DataManager.h"
 #import "ServiceManager.h"
+#import "Beach.h"
 
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -24,30 +25,6 @@
     [super viewDidLoad];
     
     self.dataManager = [DataManager shared];
-    
-    
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-    [params setObject:@"20230724" forKey:@"base_date"];
-    [params setObject:@"1230" forKey:@"base_time"];
-    [params setObject:@"308" forKey:@"beach_num"];
-    [params setObject:@"JSON" forKey:@"dataType"];
-    [[ServiceManager new] requestWithParam:params endpoint:GetUltraSrtFcstBeach completion:^(NSData * data) {
-        if (data) {
-            NSString * returnData;
-            @try
-            {
-                returnData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            }
-            @catch (NSException *exception)
-            {
-                NSLog(@"Http Request Exception [Response] :: %@", exception);
-            }
-            
-            NSLog(@"%@", returnData);
-        } else {
-            NSLog(@"failed to connect");
-        }
-    }];
     
     [self setUI];
 }
