@@ -9,7 +9,7 @@
 #import "BeachCell.h"
 #import "DataManager.h"
 
-@interface MainViewController () <UITableViewDataSource>
+@interface MainViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView * tableView;
 
@@ -33,6 +33,7 @@
     self.tableView = [UITableView new];
     [_tableView registerNib:[UINib nibWithNibName:@"BeachCell" bundle:nil] forCellReuseIdentifier:@"BeachCell"];
     _tableView.dataSource = self;
+    _tableView.delegate = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.rowHeight = 60;
     [self.view addSubview:_tableView];
@@ -47,8 +48,10 @@
 
 #pragma mark - UITableView
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-//    UITableViewCell* cell = [UITableViewCell alloc] ini
     BeachCell* cell = (BeachCell *)[tableView dequeueReusableCellWithIdentifier:@"BeachCell" forIndexPath:indexPath];
+    if (cell == nil) {
+        cell = [[BeachCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"BeachCell"];
+    }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.label.text = [[[_dataManager allBeachList] objectAtIndex:indexPath.row] beachName];
     return cell;
@@ -56,6 +59,10 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [[_dataManager allBeachList] count];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%d %@", [[[_dataManager allBeachList] objectAtIndex:indexPath.row] beachNum], [[[_dataManager allBeachList] objectAtIndex:indexPath.row] beachName]);
 }
 
 @end
