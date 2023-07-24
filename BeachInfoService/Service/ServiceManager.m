@@ -7,22 +7,45 @@
 
 #import "ServiceManager.h"
 
-@implementation ServiceManager
-//?serviceKey=Hd3XyBQRp1S%2BDtqgquxgSDsKM29vbWjolVHP2s6jVZv7KDUm%2FNiosWHuu3TIclOWN1GfvMX6H5wTVyXTlGWZbQ%3D%3D
-//base_date=20230724
-//base_time=1230
-//beach_num=308
-//dataType=JSON
-- (void)request {
-    
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-    [params setObject:@"Hd3XyBQRp1S%2BDtqgquxgSDsKM29vbWjolVHP2s6jVZv7KDUm%2FNiosWHuu3TIclOWN1GfvMX6H5wTVyXTlGWZbQ%3D%3D" forKey:@"serviceKey"];
-    [params setObject:@"20230724" forKey:@"base_date"];
-    [params setObject:@"1230" forKey:@"base_time"];
-    [params setObject:@"308" forKey:@"beach_num"];
-    [params setObject:@"JSON" forKey:@"dataType"];
-    
-    NSString *url = @"https://apis.data.go.kr/1360000/BeachInfoservice/getUltraSrtFcstBeach?";
+@interface ServiceManager ()
+
+- (NSString *)getEndpoint:(BeachInfoAPI)endpoint;
+
+@end
+
+@implementation ServiceManager {
+    NSString * _serviceKey;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _serviceKey = @"Hd3XyBQRp1S%2BDtqgquxgSDsKM29vbWjolVHP2s6jVZv7KDUm%2FNiosWHuu3TIclOWN1GfvMX6H5wTVyXTlGWZbQ%3D%3D";
+    }
+    return self;
+}
+
+- (NSString *)getEndpoint:(BeachInfoAPI)endpoint {
+    switch(endpoint) {
+        case GetTwBuoyBeach:
+            return @"/getTwBuoyBeach";
+        case GetUltraSrtFcstBeach:
+            return @"/getUltraSrtFcstBeach";
+        case GetTideInfoBeach:
+            return @"/getTideInfoBeach";
+        case GetSunInfoBeach:
+            return @"/getSunInfoBeach";
+        case GetVilageFcstBeach:
+            return @"/getVilageFcstBeach";
+        default:
+            return @"/";
+    }
+}
+
+- (void)requestWithParam:(NSMutableDictionary *)params endpoint:(BeachInfoAPI)endpoint completion:(void (^)(NSData * data))completion {
+    [params setObject:_serviceKey forKey:@"serviceKey"];
+
+    NSString *url = [NSString stringWithFormat:@"https://apis.data.go.kr/1360000/BeachInfoservice%@?", [self getEndpoint:endpoint]];
     if (params != nil && params.count > 0){
         
         // [for 문을 돌면서 순차적으로 key , value 확인 실시]
@@ -53,18 +76,8 @@
     
     // [NSURLSessionDataTask http 통신 요청 처리]
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSLog(@"%@",data);
         // [응답 결과]
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        
-        // [Response Header 확인]
-        NSDictionary *headerDictionary = [httpResponse allHeaderFields];
-        printf("\n");
-        printf("==================================== \n");
-        printf("[ViewController >> getHttpCallBack() :: HTTP 통신 Response Header 확인] \n");
-        printf("[headerDictionary :: %s] \n", headerDictionary.description.UTF8String);
-        printf("==================================== \n");
-        printf("\n");
         
         // [리턴 데이터 선언]
         NSString * returnData = @"";
@@ -83,23 +96,14 @@
             
             // [콜백 반환]
             NSLog(@"%@", returnData);
-            return;
+            completion(nil);
         } else {
             // [상태 코드 확인]
             if(httpResponse.statusCode >= 200 && httpResponse.statusCode <= 300) {
                 
-                @try
-                {
-                    returnData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                }
-                @catch (NSException *exception)
-                {
-                    NSLog(@"Http Request Exception [Response] :: %@", exception);
-                }
-                
                 // [콜백 반환]
                 NSLog(@"%@", returnData);
-                return;
+                completion(data);
             }
             else {
                 // [상태 코드 에러]
@@ -109,8 +113,7 @@
                 returnData = [returnData stringByAppendingString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
                 
                 // [콜백 반환]
-                NSLog(@"%@", returnData);
-                return;
+                completion(nil);
             }
         }
     }];

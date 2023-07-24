@@ -9,9 +9,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, BeachInfoAPI) {
+    GetTwBuoyBeach = 0,
+    GetUltraSrtFcstBeach = 1,
+    GetWhBuoyBeach = 2,
+    GetTideInfoBeach = 3,
+    GetSunInfoBeach = 4,
+    GetVilageFcstBeach = 5
+};
+
 @interface ServiceManager : NSObject
 
-- (void)request;
+- (void)requestWithParam:(NSMutableDictionary *)params endpoint:(BeachInfoAPI)endpoint completion:(void (^)(NSData * data))completion;
 
 @end
 
