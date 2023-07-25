@@ -30,6 +30,7 @@
     [self setUI];
     
     [self fetchGetTwBuoyBeachData];
+    [self fetchGetWhBuoyBeachData];
 }
 
 - (instancetype)initWithBeach:(Beach *)beach {
@@ -51,7 +52,7 @@
     [_tableView registerNib:[UINib nibWithNibName:@"InfoCell" bundle:nil] forCellReuseIdentifier:@"InfoCell"];
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _tableView.rowHeight = 160;
+    _tableView.rowHeight = 50;
     [self.view addSubview:_tableView];
     
     _tableView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -72,6 +73,22 @@
         NSLog(@"%@", result);
         
         [self.info setValue:result[@"tw"] forKey:@"현재 수온"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }];
+}
+
+- (void)fetchGetWhBuoyBeachData {
+    NSMutableDictionary *params = [self.defaultParams mutableCopy];
+//    [params setObject:@"20230724" forKey:@"base_date"];
+    [params setObject:@"202307242200" forKey:@"searchTime"];
+    [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
+    [self fetchDataWithParam:params endpoint:GetWhBuoyBeach Completion:^(NSMutableDictionary * result) {
+        result = result[@"item"][0];
+        NSLog(@"%@", result);
+        
+        [self.info setValue:result[@"wh"] forKey:@"현재 파고"];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
@@ -114,8 +131,8 @@
             cell.contentLabel.text = [self.info objectForKey:@"현재 수온"];
             break;
         default:
-            cell.titleLabel.text = @"";
-            cell.contentLabel.text = @"";
+            cell.titleLabel.text = @"현재 파고";
+            cell.contentLabel.text = [self.info objectForKey:@"현재 파고"];
     }
     return cell;
 }

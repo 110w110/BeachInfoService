@@ -33,6 +33,8 @@
             return @"/getUltraSrtFcstBeach";
         case GetTideInfoBeach:
             return @"/getTideInfoBeach";
+        case GetWhBuoyBeach:
+            return @"/getWhBuoyBeach";
         case GetSunInfoBeach:
             return @"/getSunInfoBeach";
         case GetVilageFcstBeach:
