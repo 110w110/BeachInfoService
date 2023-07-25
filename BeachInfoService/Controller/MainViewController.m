@@ -7,6 +7,7 @@
 
 #import "MainViewController.h"
 #import "DetailViewController.h"
+#import "AddViewController.h"
 #import "BeachCell.h"
 #import "DataManager.h"
 #import "ServiceManager.h"
@@ -24,7 +25,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.dataManager = [DataManager shared];
     
     [self setUI];
@@ -55,6 +55,18 @@
                                                [_tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
                                                [_tableView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
                                                ]];
+    UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"plus.square"]
+                                                                        style:UIBarButtonItemStylePlain
+                                                                       target:self
+                                                                       action:@selector(showAddViewController)];
+    [rightButtonItem setTintColor:[UIColor labelColor]];
+    self.navigationItem.rightBarButtonItem = rightButtonItem;
+}
+
+- (void)showAddViewController {
+    AddViewController * viewController = [AddViewController new];
+    UINavigationController * navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - UITableView
@@ -75,7 +87,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%d %@", [[[_dataManager selectedBeachList] objectAtIndex:indexPath.row] beachNum], [[[_dataManager selectedBeachList] objectAtIndex:indexPath.row] beachName]);
     DetailViewController * viewController = [[DetailViewController alloc] initWithBeach:[[_dataManager selectedBeachList] objectAtIndex:indexPath.row]];
-    [[self navigationController] pushViewController:viewController animated:true];
+    [[self navigationController] pushViewController:viewController animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {

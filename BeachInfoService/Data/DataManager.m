@@ -55,12 +55,14 @@
 - (void)appendItem:(Beach *)beach {
     [_selectedBeachList addObject:beach];
     [_unSelectedBeachList removeObject:beach];
+    NSLog(@"%@",_unSelectedBeachList);
     // Userdefaults
 }
 
 - (void)removeItem:(Beach *)beach {
     [_selectedBeachList removeObject:beach];
     [_unSelectedBeachList addObject:beach];
+    NSLog(@"%@",_unSelectedBeachList);
     // Userdefaults
     
 }
