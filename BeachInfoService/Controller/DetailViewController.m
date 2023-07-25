@@ -95,7 +95,7 @@
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetTwBuoyBeach Completion:^(NSMutableDictionary * result) {
         result = result[@"response"][@"body"][@"items"][@"item"][0];
-        [self.currentInfo setValue:result[@"tw"] forKey:@"현재 수온"];
+        [self.currentInfo setValue:[NSString stringWithFormat:@"%@ °C", result[@"tw"]] forKey:@"현재 수온"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -109,7 +109,7 @@
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetWhBuoyBeach Completion:^(NSMutableDictionary * result) {
         result = result[@"response"][@"body"][@"items"][@"item"][0];
-        [self.currentInfo setValue:result[@"wh"] forKey:@"현재 파고"];
+        [self.currentInfo setValue:[NSString stringWithFormat:@"%@ m", result[@"wh"]] forKey:@"현재 파고"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -125,10 +125,10 @@
         for (NSMutableDictionary * item in result[@"response"][@"body"][@"items"][@"item"]) {
             if ([item[@"tiType"]  isEqual: @"ET1"]) {
                 [self.currentInfo setValue:item[@"tiTime"] forKey:@"간조 시간"];
-                [self.currentInfo setValue:item[@"tilevel"] forKey:@"간조 수위"];
+                [self.currentInfo setValue:[NSString stringWithFormat:@"%@ m", item[@"tilevel"]] forKey:@"간조 수위"];
             } else if ([item[@"tiType"]  isEqual: @"FT1"]) {
                 [self.currentInfo setValue:item[@"tiTime"] forKey:@"만조 시간"];
-                [self.currentInfo setValue:item[@"tilevel"] forKey:@"만조 수위"];
+                [self.currentInfo setValue:[NSString stringWithFormat:@"%@ m", item[@"tilevel"]] forKey:@"만조 수위"];
             }
             
         }
