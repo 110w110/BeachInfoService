@@ -37,8 +37,11 @@
                          [[Beach alloc] initWithBeachNum:19 beachName:@"한들 해수욕장"],
                          [[Beach alloc] initWithBeachNum:20 beachName:@"큰풀안 해수욕장"],
                          nil];
-        _selectedBeachList = [_allBeachList mutableCopy];
-        _unSelectedBeachList = [NSMutableArray array];
+        
+        _selectedBeachList = [NSMutableArray array];
+        _unSelectedBeachList = [_allBeachList mutableCopy];
+//        _selectedBeachList = [_allBeachList mutableCopy];
+//        _unSelectedBeachList = [NSMutableArray array];
     }
     return self;
 }
@@ -55,16 +58,23 @@
 - (void)appendItem:(Beach *)beach {
     [_selectedBeachList addObject:beach];
     [_unSelectedBeachList removeObject:beach];
-    NSLog(@"%@",_unSelectedBeachList);
+    
     // Userdefaults
+//    NSUserDefaults *userDefaults = NSUserDefaults.standardUserDefaults;
+//    [userDefaults setObject:_selectedBeachList forKey:@"sel"];
+//    [userDefaults setObject:_unSelectedBeachList forKey:@"unsel"];
+//    [userDefaults synchronize];
 }
 
 - (void)removeItem:(Beach *)beach {
     [_selectedBeachList removeObject:beach];
     [_unSelectedBeachList addObject:beach];
-    NSLog(@"%@",_unSelectedBeachList);
-    // Userdefaults
     
+    // Userdefaults
+//    NSUserDefaults *userDefaults = NSUserDefaults.standardUserDefaults;
+//    [userDefaults setObject:_selectedBeachList forKey:@"sel"];
+//    [userDefaults setObject:_unSelectedBeachList forKey:@"unsel"];
+//    [userDefaults synchronize];
 }
 
 @end

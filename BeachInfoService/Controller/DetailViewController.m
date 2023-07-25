@@ -82,7 +82,7 @@
     [NSLayoutConstraint activateConstraints:@[ [_tableView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
                                                [_tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
                                                [_tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-                                               [_tableView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
+                                               [_tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
                                                ]];
 }
 
