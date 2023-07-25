@@ -160,21 +160,95 @@
     [params setObject:@"1100" forKey:@"base_time"];
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetVilageFcstBeach Completion:^(NSMutableDictionary * result) {
-//        for (NSMutableDictionary * item in result[@"response"][@"body"][@"items"][@"item"]) {
-//
-//            if ([item[@"category"]  isEqual: @"TMP"]) {
-//                [self.info setValue:item[@"fcstValue"] forKey:@"1시간 기온"];
-//            } else if ([item[@"category"]  isEqual: @"POP"]) {
-//                [self.info setValue:item[@"fcstValue"] forKey:@"강수 확률"];
-//            } else if ([item[@"category"]  isEqual: @"PCP"]) {
-//                [self.info setValue:item[@"fcstValue"] forKey:@"1시간 강수량"];
-//            } else if ([item[@"category"]  isEqual: @"POP"]) {
-//                [self.info setValue:item[@"fcstValue"] forKey:@"파고 예보"];
-//            } else if ([item[@"category"]  isEqual: @"POP"]) {
-//                [self.info setValue:item[@"fcstValue"] forKey:@"강수 확률"];
-//            }
-//
-//        }
+        for (NSMutableDictionary * item in result[@"response"][@"body"][@"items"][@"item"]) {
+
+            if ([item[@"category"]  isEqual: @"TMP"]) {
+                NSString * value = [NSString stringWithFormat:@"%@ °C", item[@"fcstValue"]];
+                [self.forecastInfo setValue:value forKey:@"1시간 기온"];
+            } else if ([item[@"category"]  isEqual: @"POP"]) {
+                NSString * value = [NSString stringWithFormat:@"%@ %%", item[@"fcstValue"]];
+                [self.forecastInfo setValue:value forKey:@"강수 확률"];
+            } else if ([item[@"category"]  isEqual: @"PCP"]) {
+                NSString * value = [NSString stringWithFormat:@"%@ mm", item[@"fcstValue"]];
+                [self.forecastInfo setValue:value forKey:@"1시간 강수량"];
+            } else if ([item[@"category"]  isEqual: @"WAV"]) {
+                NSString * value = [NSString stringWithFormat:@"%@ m", item[@"fcstValue"]];
+                [self.forecastInfo setValue:value forKey:@"파고 예보"];
+            } else if ([item[@"category"]  isEqual: @"SKY"]) {
+                NSString * value;
+                if ([item[@"fcstValue"]  isEqual: @"1"]) {
+                    value = @"맑음";
+                } else if ([item[@"fcstValue"]  isEqual: @"3"]) {
+                    value = @"구름 많음";
+                } else if ([item[@"fcstValue"]  isEqual: @"4"]) {
+                    value = @"흐림";
+                } else {
+                    value = @"정보 없음";
+                }
+                [self.forecastInfo setValue:value forKey:@"하늘 상태"];
+            } else if ([item[@"category"]  isEqual: @"WSD"]) {
+                NSString * value = [NSString stringWithFormat:@"%@ m/s", item[@"fcstValue"]];
+                [self.forecastInfo setValue:value forKey:@"풍속"];
+            } else if ([item[@"category"]  isEqual: @"VEC"]) {
+                NSString * value = [NSString stringWithFormat:@"%@", item[@"fcstValue"]];
+                int degree;
+                if (![item[@"fcstValue"] respondsToSelector:@selector(intValue)]) {
+                    continue;
+                }
+                degree = [item[@"fcstValue"] intValue];
+                switch (degree) {
+                    case 0 ... 45:
+                        value = @"N-NE";
+                        break;
+                    case 46 ... 90:
+                        value = @"NE-E";
+                        break;
+                    case 91 ... 135:
+                        value = @"E-SE";
+                        break;
+                    case 136 ... 180:
+                        value = @"SE-S";
+                        break;
+                    case 181 ... 225:
+                        value = @"S-SW";
+                        break;
+                    case 226 ... 270:
+                        value = @"SW-W";
+                        break;
+                    case 271 ... 315:
+                        value = @"W-NW";
+                        break;
+                    case 316 ... 365:
+                        value = @"NW-N";
+                        break;
+                    default:
+                        value = @"정보 없음";
+                        break;
+                }
+                [self.forecastInfo setValue:value forKey:@"풍향"];
+            } else if ([item[@"category"]  isEqual: @"PTY"]) {
+                NSString * value;
+                if ([item[@"fcstValue"]  isEqual: @"0"]) {
+                    value = @"없음";
+                } else if ([item[@"fcstValue"]  isEqual: @"1"]) {
+                    value = @"비";
+                } else if ([item[@"fcstValue"]  isEqual: @"2"]) {
+                    value = @"비와 눈";
+                } else if ([item[@"fcstValue"]  isEqual: @"3"]) {
+                    value = @"눈";
+                } else if ([item[@"fcstValue"]  isEqual: @"5"]) {
+                    value = @"빗방울";
+                } else if ([item[@"fcstValue"]  isEqual: @"6"]) {
+                    value = @"빗방울 날림";
+                } else if ([item[@"fcstValue"]  isEqual: @"7"]) {
+                    value = @"눈 날림";
+                } else {
+                    value = @"정보 없음";
+                }
+                [self.forecastInfo setValue:value forKey:@"강수 형태"];
+            }
+
+        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -222,8 +296,10 @@
         cell.titleLabel.text = sortedKeys[indexPath.row];
         cell.contentLabel.text = [self.currentInfo objectForKey:sortedKeys[indexPath.row]];
     } else {
-        cell.titleLabel.text = @"setset";
-        cell.contentLabel.text = @"test";
+        NSArray *sortedKeys = [self.forecastInfo.allKeys sortedArrayUsingSelector:@selector(compare:)];
+        
+        cell.titleLabel.text = sortedKeys[indexPath.row];
+        cell.contentLabel.text = [self.forecastInfo objectForKey:sortedKeys[indexPath.row]];
     }
     return cell;
 }
