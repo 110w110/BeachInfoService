@@ -35,11 +35,18 @@
     self.title = @"해수욕장 정보조회 시스템";
     [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
     
+    [[self.navigationController navigationBar] setTintColor:[UIColor labelColor]];
+    UINavigationBarAppearance * appearance = [UINavigationBarAppearance new];
+    [appearance configureWithDefaultBackground];
+    [appearance setBackgroundColor:[UIColor systemBlueColor]];
+    [[[self navigationController] navigationBar] setStandardAppearance:appearance];
+    [[[self navigationController] navigationBar] setScrollEdgeAppearance:appearance];
+    
     self.tableView = [UITableView new];
     [_tableView registerNib:[UINib nibWithNibName:@"BeachCell" bundle:nil] forCellReuseIdentifier:@"BeachCell"];
     _tableView.dataSource = self;
     _tableView.delegate = self;
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.rowHeight = 60;
     [self.view addSubview:_tableView];
     

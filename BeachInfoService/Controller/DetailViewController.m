@@ -75,7 +75,7 @@
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleInsetGrouped];
     [_tableView registerNib:[UINib nibWithNibName:@"InfoCell" bundle:nil] forCellReuseIdentifier:@"InfoCell"];
     _tableView.dataSource = self;
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.rowHeight = 50;
     [self.view addSubview:_tableView];
     
@@ -269,7 +269,6 @@
                 NSLog(@"Http Request Exception [Response] :: %@", exception);
             }
             NSMutableDictionary * result = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-//            result = result[@"response"][@"body"][@"items"];
             completion(result);
         } else {
             NSLog(@"failed to connect");
