@@ -38,6 +38,7 @@
     [self fetchGetTwBuoyBeachData];
     [self fetchGetWhBuoyBeachData];
     [self fetchGetTideInfoBuoyBeachData];
+    [self fetchGetSunInfoBuoyBeachData];
 }
 
 - (instancetype)initWithBeach:(Beach *)beach {
@@ -85,9 +86,8 @@
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetTwBuoyBeach Completion:^(NSMutableDictionary * result) {
         result = result[@"item"][0];
-        NSLog(@"%@", result);
-        
         [self.info setValue:result[@"tw"] forKey:@"현재 수온"];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
@@ -100,9 +100,8 @@
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetWhBuoyBeach Completion:^(NSMutableDictionary * result) {
         result = result[@"item"][0];
-        NSLog(@"%@", result);
-        
         [self.info setValue:result[@"wh"] forKey:@"현재 파고"];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
@@ -114,11 +113,7 @@
     [params setObject:_baseDate forKey:@"base_date"];
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetTideInfoBeach Completion:^(NSMutableDictionary * result) {
-//        result = result[@"item"][0];
-        NSLog(@"%@", result);
-        
         for (NSMutableDictionary * item in result[@"item"]) {
-            NSLog(@"%@", item[@"tiType"]);
             if ([item[@"tiType"]  isEqual: @"ET1"]) {
                 [self.info setValue:item[@"tiTime"] forKey:@"간조 시간"];
                 [self.info setValue:item[@"tilevel"] forKey:@"간조 수위"];
@@ -128,7 +123,24 @@
             }
             
         }
-//        [self.info setValue:result[@"wh"] forKey:@"현재 파고"];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }];
+}
+
+- (void)fetchGetSunInfoBuoyBeachData {
+    NSMutableDictionary *params = [self.defaultParams mutableCopy];
+    [params setObject:_baseDate forKey:@"base_date"];
+    [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
+    [self fetchDataWithParam:params endpoint:GetSunInfoBeach Completion:^(NSMutableDictionary * result) {
+        NSLog(@"%@", result[@"item"][0]);
+        result = result[@"item"][0];
+        
+        [self.info setValue:result[@"sunrise"] forKey:@"일출 시간"];
+        [self.info setValue:result[@"sunset"] forKey:@"일몰 시간"];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
@@ -148,9 +160,7 @@
                 NSLog(@"Http Request Exception [Response] :: %@", exception);
             }
             NSMutableDictionary * result = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            result = result[@"response"];
-            result = result[@"body"];
-            result = result[@"items"];
+            result = result[@"response"][@"body"][@"items"];
             completion(result);
         } else {
             NSLog(@"failed to connect");
