@@ -14,7 +14,9 @@
 
 @property (nonatomic, strong) UITableView * tableView;
 
-@property (nonatomic) NSMutableDictionary * info;
+@property (nonatomic, strong) NSMutableDictionary * info;
+
+@property (nonatomic, strong) NSMutableDictionary * defaultParams;
 
 @end
 
@@ -22,19 +24,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     NSLog(@"%@", _beach);
     self.tableView.dataSource = self;
     [self setUI];
-    [self fetchDataWithCompletion:^(NSMutableDictionary * result) {
-        result = [result valueForKey:@"item"];
-        NSLog(@"%@", result);
-        
-        for (NSString *keyData in result){
-            NSLog(@"%@", keyData);
-        }
-    }];
+    
+    [self fetchGetTwBuoyBeachData];
 }
 
 - (instancetype)initWithBeach:(Beach *)beach {
@@ -42,6 +37,8 @@
     if (self) {
         _beach = beach;
         _info = [NSMutableDictionary dictionary];
+        _defaultParams = [NSMutableDictionary dictionary];
+        [_defaultParams setObject:@"JSON" forKey:@"dataType"];
     }
     return self;
 }
@@ -54,7 +51,7 @@
     [_tableView registerNib:[UINib nibWithNibName:@"InfoCell" bundle:nil] forCellReuseIdentifier:@"InfoCell"];
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _tableView.rowHeight = 60;
+    _tableView.rowHeight = 160;
     [self.view addSubview:_tableView];
     
     _tableView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -65,13 +62,24 @@
                                                ]];
 }
 
-- (void)fetchDataWithCompletion:(void (^)(NSMutableDictionary * result))completion {
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+- (void)fetchGetTwBuoyBeachData {
+    NSMutableDictionary *params = [self.defaultParams mutableCopy];
     [params setObject:@"20230724" forKey:@"base_date"];
-    [params setObject:@"1230" forKey:@"base_time"];
-    [params setObject:@"308" forKey:@"beach_num"];
-    [params setObject:@"JSON" forKey:@"dataType"];
-    [[ServiceManager new] requestWithParam:params endpoint:GetUltraSrtFcstBeach completion:^(NSData * data) {
+    [params setObject:@"202307242200" forKey:@"searchTime"];
+    [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
+    [self fetchDataWithParam:params endpoint:GetTwBuoyBeach Completion:^(NSMutableDictionary * result) {
+        result = result[@"item"][0];
+        NSLog(@"%@", result);
+        
+        [self.info setValue:result[@"tw"] forKey:@"현재 수온"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }];
+}
+
+- (void)fetchDataWithParam:(NSMutableDictionary *)params endpoint:(BeachInfoAPI)endpoint Completion:(void (^)(NSMutableDictionary * result))completion {
+    [[ServiceManager new] requestWithParam:params endpoint:endpoint completion:^(NSData * data) {
         if (data) {
             NSString * returnData;
             @try
@@ -83,9 +91,9 @@
                 NSLog(@"Http Request Exception [Response] :: %@", exception);
             }
             NSMutableDictionary * result = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            result = [result valueForKey:@"response"];
-            result = [result valueForKey:@"body"];
-            result = [result valueForKey:@"items"];
+            result = result[@"response"];
+            result = result[@"body"];
+            result = result[@"items"];
             completion(result);
         } else {
             NSLog(@"failed to connect");
@@ -100,14 +108,21 @@
         cell = [[InfoCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"InfoCell"];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.titleLabel.text = @"Test";
-    cell.contentLabel.text = @"content";
+    switch (indexPath.row) {
+        case 0:
+            cell.titleLabel.text = @"현재 수온";
+            cell.contentLabel.text = [self.info objectForKey:@"현재 수온"];
+            break;
+        default:
+            cell.titleLabel.text = @"";
+            cell.contentLabel.text = @"";
+    }
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    return [self.info count];
-    return 20;
+    return [self.info count];
+//    return 20;
 }
 
 @end
