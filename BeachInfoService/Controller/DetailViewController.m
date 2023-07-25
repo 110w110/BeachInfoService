@@ -169,37 +169,21 @@
     [formatter setDateFormat:@"yyyy년 MM월 dd일 HH시 mm분 기준"];
     NSString *currentDateString = [formatter stringFromDate:[NSDate date]];
     
+    NSArray *sortedKeys = [self.info.allKeys sortedArrayUsingSelector:@selector(compare:)];
+    
     if (indexPath.row == 0) {
         cell.titleLabel.text = currentDateString;
         cell.contentLabel.text = @"";
     } else {
-        cell.titleLabel.text = [self.info allKeys][indexPath.row - 1];
-        cell.contentLabel.text = [self.info allValues][indexPath.row - 1];
+        cell.titleLabel.text = sortedKeys[indexPath.row - 1];
+        cell.contentLabel.text = [self.info objectForKey:sortedKeys[indexPath.row - 1]];
     }
-//    switch (indexPath.row) {
-//        case 0:
-//            cell.titleLabel.text = currentDateString;
-//            cell.contentLabel.text = @"";
-//            break;
-//        case 1:
-//            cell.titleLabel.text = @"현재 수온";
-//            cell.contentLabel.text = [self.info objectForKey:@"현재 수온"];
-//            break;
-//        case 2:
-//            cell.titleLabel.text = @"현재 파고";
-//            cell.contentLabel.text = [self.info objectForKey:@"현재 파고"];
-//            break;
-//        default:
-//            cell.titleLabel.text = @"";
-//            cell.contentLabel.text = [self.info objectForKey:@""];
-//            break;
-//    }
+    
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.info count] + 1;
-//    return 20;
 }
 
 @end
