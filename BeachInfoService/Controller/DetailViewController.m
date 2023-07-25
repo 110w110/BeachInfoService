@@ -75,7 +75,6 @@
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleInsetGrouped];
     [_tableView registerNib:[UINib nibWithNibName:@"InfoCell" bundle:nil] forCellReuseIdentifier:@"InfoCell"];
     _tableView.dataSource = self;
-//    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.rowHeight = 50;
     [self.view addSubview:_tableView];
     

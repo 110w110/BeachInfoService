@@ -37,7 +37,7 @@
                          [[Beach alloc] initWithBeachNum:19 beachName:@"한들 해수욕장"],
                          [[Beach alloc] initWithBeachNum:20 beachName:@"큰풀안 해수욕장"],
                          nil];
-        _selectedBeachList = [NSArray array];
+        _selectedBeachList = [_allBeachList mutableCopy];
     }
     return self;
 }

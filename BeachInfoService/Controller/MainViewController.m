@@ -46,7 +46,6 @@
     [_tableView registerNib:[UINib nibWithNibName:@"BeachCell" bundle:nil] forCellReuseIdentifier:@"BeachCell"];
     _tableView.dataSource = self;
     _tableView.delegate = self;
-//    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.rowHeight = 60;
     [self.view addSubview:_tableView];
     
@@ -65,18 +64,24 @@
         cell = [[BeachCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"BeachCell"];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.label.text = [[[_dataManager allBeachList] objectAtIndex:indexPath.row] beachName];
+    cell.label.text = [[[_dataManager selectedBeachList] objectAtIndex:indexPath.row] beachName];
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[_dataManager allBeachList] count];
+    return [[_dataManager selectedBeachList] count];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%d %@", [[[_dataManager allBeachList] objectAtIndex:indexPath.row] beachNum], [[[_dataManager allBeachList] objectAtIndex:indexPath.row] beachName]);
-    DetailViewController * viewController = [[DetailViewController alloc] initWithBeach:[[_dataManager allBeachList] objectAtIndex:indexPath.row]];
+    NSLog(@"%d %@", [[[_dataManager selectedBeachList] objectAtIndex:indexPath.row] beachNum], [[[_dataManager selectedBeachList] objectAtIndex:indexPath.row] beachName]);
+    DetailViewController * viewController = [[DetailViewController alloc] initWithBeach:[[_dataManager selectedBeachList] objectAtIndex:indexPath.row]];
     [[self navigationController] pushViewController:viewController animated:true];
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [[_dataManager selectedBeachList] removeObject:[[_dataManager selectedBeachList] objectAtIndex:indexPath.row]];
+        [self.tableView reloadData];
+    }
+}
 @end
