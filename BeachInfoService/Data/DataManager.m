@@ -11,6 +11,8 @@
 
 @property (nonatomic) NSMutableArray * favoriteBeachList;
 
+@property (nonatomic) NSArray<Beach *> * allBeachList;
+
 @end
 
 @implementation DataManager

@@ -12,6 +12,8 @@
 
 @interface DetailViewController () <UITableViewDataSource>
 
+@property (nonatomic, strong) Beach * beach;
+
 @property (nonatomic, strong) UITableView * tableView;
 
 @property (nonatomic, strong) NSMutableDictionary * currentInfo;

@@ -12,8 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DataManager : NSObject
 
-@property (nonatomic) NSArray<Beach *> * allBeachList;
-
 @property (nonatomic) NSMutableArray<Beach *> * selectedBeachList;
 
 @property (nonatomic) NSMutableArray<Beach *> * unSelectedBeachList;
