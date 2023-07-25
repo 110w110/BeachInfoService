@@ -20,9 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DataManager *)shared;
 
-- (void)appendItem:(Beach *)beach;
+- (void)appendItem:(NSInteger)index;
 
-- (void)removeItem:(Beach *)beach;
+- (void)removeItem:(NSInteger)index;
 
 @end
 

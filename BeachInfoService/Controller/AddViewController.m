@@ -78,7 +78,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [[DataManager shared] appendItem:[[[DataManager shared] unSelectedBeachList] objectAtIndex:indexPath.row]];
+    [[DataManager shared] appendItem:indexPath.row];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

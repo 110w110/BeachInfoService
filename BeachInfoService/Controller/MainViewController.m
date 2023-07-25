@@ -95,7 +95,7 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [[DataManager shared] removeItem:[[[DataManager shared] selectedBeachList] objectAtIndex:indexPath.row]];
+        [[DataManager shared] removeItem:indexPath.row];
         [self.tableView reloadData];
     }
 }

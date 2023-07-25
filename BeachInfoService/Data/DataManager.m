@@ -9,6 +9,8 @@
 
 @interface DataManager ()
 
+@property (nonatomic) NSMutableArray * favoriteBeachList;
+
 @end
 
 @implementation DataManager
@@ -38,10 +40,23 @@
                          [[Beach alloc] initWithBeachNum:20 beachName:@"큰풀안 해수욕장"],
                          nil];
         
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        _favoriteBeachList = [[defaults objectForKey:@"flist"] mutableCopy];
         _selectedBeachList = [NSMutableArray array];
-        _unSelectedBeachList = [_allBeachList mutableCopy];
-//        _selectedBeachList = [_allBeachList mutableCopy];
-//        _unSelectedBeachList = [NSMutableArray array];
+        _unSelectedBeachList = [NSMutableArray array];
+        if (_favoriteBeachList) {
+            for (Beach * beach in _allBeachList) {
+                if ([_favoriteBeachList containsObject:[beach beachName]]) {
+                    [self.selectedBeachList addObject:beach];
+                } else {
+                    [self.unSelectedBeachList addObject:beach];
+                }
+            }
+        } else {
+            _favoriteBeachList = [NSMutableArray array];
+            [defaults setObject:_favoriteBeachList forKey:@"flist"];
+            [defaults synchronize];
+        }
     }
     return self;
 }
@@ -55,26 +70,24 @@
     return shared;
 }
 
-- (void)appendItem:(Beach *)beach {
-    [_selectedBeachList addObject:beach];
-    [_unSelectedBeachList removeObject:beach];
+- (void)appendItem:(NSInteger)index {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [self.favoriteBeachList addObject:[_unSelectedBeachList[index] beachName]];
+    [defaults setObject:_favoriteBeachList forKey:@"flist"];
+    [defaults synchronize];
     
-    // Userdefaults
-//    NSUserDefaults *userDefaults = NSUserDefaults.standardUserDefaults;
-//    [userDefaults setObject:_selectedBeachList forKey:@"sel"];
-//    [userDefaults setObject:_unSelectedBeachList forKey:@"unsel"];
-//    [userDefaults synchronize];
+    [self.selectedBeachList insertObject:_unSelectedBeachList[index] atIndex:0];
+    [self.unSelectedBeachList removeObject:_unSelectedBeachList[index]];
 }
 
-- (void)removeItem:(Beach *)beach {
-    [_selectedBeachList removeObject:beach];
-    [_unSelectedBeachList addObject:beach];
+- (void)removeItem:(NSInteger)index {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [self.favoriteBeachList removeObject:[_selectedBeachList[index] beachName]];
+    [defaults setObject:_favoriteBeachList forKey:@"flist"];
+    [defaults synchronize];
     
-    // Userdefaults
-//    NSUserDefaults *userDefaults = NSUserDefaults.standardUserDefaults;
-//    [userDefaults setObject:_selectedBeachList forKey:@"sel"];
-//    [userDefaults setObject:_unSelectedBeachList forKey:@"unsel"];
-//    [userDefaults synchronize];
+    [self.unSelectedBeachList insertObject:_selectedBeachList[index] atIndex:0];
+    [self.selectedBeachList removeObject:_selectedBeachList[index]];
 }
 
 @end
