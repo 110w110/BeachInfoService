@@ -56,6 +56,7 @@
             _favoriteBeachList = [NSMutableArray array];
             [defaults setObject:_favoriteBeachList forKey:@"flist"];
             [defaults synchronize];
+            _unSelectedBeachList = [_allBeachList mutableCopy];
         }
     }
     return self;
