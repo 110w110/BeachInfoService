@@ -17,17 +17,19 @@
 
 @property (nonatomic, strong) UITableView * tableView;
 
-@property (nonatomic, weak) DataManager * dataManager;
-
 @end
 
 @implementation MainViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.dataManager = [DataManager shared];
     
     [self setUI];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.tableView reloadData];
 }
 
 #pragma mark - UI
@@ -66,6 +68,7 @@
 - (void)showAddViewController {
     AddViewController * viewController = [AddViewController new];
     UINavigationController * navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    navigationController.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
@@ -76,23 +79,23 @@
         cell = [[BeachCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"BeachCell"];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.label.text = [[[_dataManager selectedBeachList] objectAtIndex:indexPath.row] beachName];
+    cell.label.text = [[[[DataManager shared] selectedBeachList] objectAtIndex:indexPath.row] beachName];
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[_dataManager selectedBeachList] count];
+    return [[[DataManager shared] selectedBeachList] count];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%d %@", [[[_dataManager selectedBeachList] objectAtIndex:indexPath.row] beachNum], [[[_dataManager selectedBeachList] objectAtIndex:indexPath.row] beachName]);
-    DetailViewController * viewController = [[DetailViewController alloc] initWithBeach:[[_dataManager selectedBeachList] objectAtIndex:indexPath.row]];
+    NSLog(@"%d %@", [[[[DataManager shared] selectedBeachList] objectAtIndex:indexPath.row] beachNum], [[[[DataManager shared] selectedBeachList] objectAtIndex:indexPath.row] beachName]);
+    DetailViewController * viewController = [[DetailViewController alloc] initWithBeach:[[[DataManager shared] selectedBeachList] objectAtIndex:indexPath.row]];
     [[self navigationController] pushViewController:viewController animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_dataManager removeItem:[[_dataManager selectedBeachList] objectAtIndex:indexPath.row]];
+        [[DataManager shared] removeItem:[[[DataManager shared] selectedBeachList] objectAtIndex:indexPath.row]];
         [self.tableView reloadData];
     }
 }

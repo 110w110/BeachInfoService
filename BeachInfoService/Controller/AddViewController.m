@@ -14,17 +14,18 @@
 
 @property (nonatomic, strong) UITableView * tableView;
 
-@property (nonatomic, weak) DataManager * dataManager;
-
 @end
 
 @implementation AddViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.dataManager = [DataManager shared];
     
     [self setUI];
+}
+
+- (void)dismiss {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UI
@@ -45,6 +46,13 @@
                                                [_tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
                                                [_tableView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
                                                ]];
+    
+    UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithTitle:@"닫기"
+                                                                      style:UIBarButtonItemStylePlain
+                                                                     target:self
+                                                                     action:@selector(dismiss)];
+    [leftBarButton setTintColor:[UIColor labelColor]];
+    self.navigationItem.leftBarButtonItem = leftBarButton;
 }
 
 #pragma mark - UITableView
@@ -54,13 +62,17 @@
         cell = [[BeachCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"BeachCell"];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.label.text = [[[_dataManager unSelectedBeachList] objectAtIndex:indexPath.row] beachName];
+    cell.label.text = [[[[DataManager shared] unSelectedBeachList] objectAtIndex:indexPath.row] beachName];
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[_dataManager unSelectedBeachList] count];
-    return 0;
+    return [[[DataManager shared] unSelectedBeachList] count];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [[DataManager shared] appendItem:[[[DataManager shared] unSelectedBeachList] objectAtIndex:indexPath.row]];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
