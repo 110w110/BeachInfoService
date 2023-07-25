@@ -33,6 +33,13 @@
     self.title = @"즐겨찾는 해수욕장 추가";
     [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
     
+    [[self.navigationController navigationBar] setTintColor:[UIColor labelColor]];
+    UINavigationBarAppearance * appearance = [UINavigationBarAppearance new];
+    [appearance configureWithDefaultBackground];
+    [appearance setBackgroundColor:[UIColor systemBlueColor]];
+    [[[self navigationController] navigationBar] setStandardAppearance:appearance];
+    [[[self navigationController] navigationBar] setScrollEdgeAppearance:appearance];
+    
     self.tableView = [UITableView new];
     [_tableView registerNib:[UINib nibWithNibName:@"BeachCell" bundle:nil] forCellReuseIdentifier:@"BeachCell"];
     _tableView.dataSource = self;

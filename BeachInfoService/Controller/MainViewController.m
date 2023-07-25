@@ -34,7 +34,7 @@
 
 #pragma mark - UI
 - (void)setUI {
-    self.title = @"해수욕장 정보조회 시스템";
+    self.title = @"BadaBoda";
     [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
     
     [[self.navigationController navigationBar] setTintColor:[UIColor labelColor]];
