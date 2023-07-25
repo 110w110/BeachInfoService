@@ -23,6 +23,7 @@
 		332D4A912A6EA108006904D1 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A902A6EA108006904D1 /* DetailViewController.m */; };
 		332D4A972A6EA697006904D1 /* InfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A952A6EA697006904D1 /* InfoCell.m */; };
 		332D4A982A6EA697006904D1 /* InfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 332D4A962A6EA697006904D1 /* InfoCell.xib */; };
+		332D4A9D2A6FB650006904D1 /* AddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 332D4A9C2A6FB650006904D1 /* AddViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,8 @@
 		332D4A942A6EA697006904D1 /* InfoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfoCell.h; sourceTree = "<group>"; };
 		332D4A952A6EA697006904D1 /* InfoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InfoCell.m; sourceTree = "<group>"; };
 		332D4A962A6EA697006904D1 /* InfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InfoCell.xib; sourceTree = "<group>"; };
+		332D4A9B2A6FB650006904D1 /* AddViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddViewController.h; sourceTree = "<group>"; };
+		332D4A9C2A6FB650006904D1 /* AddViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 				332D4A8A2A6E5C7F006904D1 /* MainViewController.m */,
 				332D4A8F2A6EA108006904D1 /* DetailViewController.h */,
 				332D4A902A6EA108006904D1 /* DetailViewController.m */,
+				332D4A9B2A6FB650006904D1 /* AddViewController.h */,
+				332D4A9C2A6FB650006904D1 /* AddViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -231,6 +236,7 @@
 			files = (
 				332D4A662A6E4A65006904D1 /* ViewController.m in Sources */,
 				332D4A792A6E4A8E006904D1 /* DataManager.m in Sources */,
+				332D4A9D2A6FB650006904D1 /* AddViewController.m in Sources */,
 				332D4A602A6E4A65006904D1 /* AppDelegate.m in Sources */,
 				332D4A8E2A6E6AE2006904D1 /* ServiceManager.m in Sources */,
 				332D4A8B2A6E5C7F006904D1 /* MainViewController.m in Sources */,

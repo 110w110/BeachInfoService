@@ -38,6 +38,7 @@
                          [[Beach alloc] initWithBeachNum:20 beachName:@"큰풀안 해수욕장"],
                          nil];
         _selectedBeachList = [_allBeachList mutableCopy];
+        _unSelectedBeachList = [NSMutableArray array];
     }
     return self;
 }
@@ -49,6 +50,19 @@
         shared = [[DataManager alloc] init];
     });
     return shared;
+}
+
+- (void)appendItem:(Beach *)beach {
+    [_selectedBeachList addObject:beach];
+    [_unSelectedBeachList removeObject:beach];
+    // Userdefaults
+}
+
+- (void)removeItem:(Beach *)beach {
+    [_selectedBeachList removeObject:beach];
+    [_unSelectedBeachList addObject:beach];
+    // Userdefaults
+    
 }
 
 @end

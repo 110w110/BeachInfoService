@@ -16,7 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) NSMutableArray<Beach *> * selectedBeachList;
 
+@property (nonatomic) NSMutableArray<Beach *> * unSelectedBeachList;
+
 + (DataManager *)shared;
+
+- (void)appendItem:(Beach *)beach;
+
+- (void)removeItem:(Beach *)beach;
 
 @end
 

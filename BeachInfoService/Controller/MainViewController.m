@@ -80,7 +80,7 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [[_dataManager selectedBeachList] removeObject:[[_dataManager selectedBeachList] objectAtIndex:indexPath.row]];
+        [_dataManager removeItem:[[_dataManager selectedBeachList] objectAtIndex:indexPath.row]];
         [self.tableView reloadData];
     }
 }
