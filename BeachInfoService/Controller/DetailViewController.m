@@ -14,7 +14,9 @@
 
 @property (nonatomic, strong) UITableView * tableView;
 
-@property (nonatomic, strong) NSMutableDictionary * info;
+@property (nonatomic, strong) NSMutableDictionary * currentInfo;
+
+@property (nonatomic, strong) NSMutableDictionary * forecastInfo;
 
 @property (nonatomic, strong) NSMutableDictionary * defaultParams;
 
@@ -48,7 +50,8 @@
     self = [super init];
     if (self) {
         _beach = beach;
-        _info = [NSMutableDictionary dictionary];
+        _currentInfo = [NSMutableDictionary dictionary];
+        _forecastInfo = [NSMutableDictionary dictionary];
         _defaultParams = [NSMutableDictionary dictionary];
         [_defaultParams setObject:@"JSON" forKey:@"dataType"];
     }
@@ -91,7 +94,7 @@
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetTwBuoyBeach Completion:^(NSMutableDictionary * result) {
         result = result[@"response"][@"body"][@"items"][@"item"][0];
-        [self.info setValue:result[@"tw"] forKey:@"현재 수온"];
+        [self.currentInfo setValue:result[@"tw"] forKey:@"현재 수온"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -105,7 +108,7 @@
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetWhBuoyBeach Completion:^(NSMutableDictionary * result) {
         result = result[@"response"][@"body"][@"items"][@"item"][0];
-        [self.info setValue:result[@"wh"] forKey:@"현재 파고"];
+        [self.currentInfo setValue:result[@"wh"] forKey:@"현재 파고"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -120,11 +123,11 @@
     [self fetchDataWithParam:params endpoint:GetTideInfoBeach Completion:^(NSMutableDictionary * result) {
         for (NSMutableDictionary * item in result[@"response"][@"body"][@"items"][@"item"]) {
             if ([item[@"tiType"]  isEqual: @"ET1"]) {
-                [self.info setValue:item[@"tiTime"] forKey:@"간조 시간"];
-                [self.info setValue:item[@"tilevel"] forKey:@"간조 수위"];
+                [self.currentInfo setValue:item[@"tiTime"] forKey:@"간조 시간"];
+                [self.currentInfo setValue:item[@"tilevel"] forKey:@"간조 수위"];
             } else if ([item[@"tiType"]  isEqual: @"FT1"]) {
-                [self.info setValue:item[@"tiTime"] forKey:@"만조 시간"];
-                [self.info setValue:item[@"tilevel"] forKey:@"만조 수위"];
+                [self.currentInfo setValue:item[@"tiTime"] forKey:@"만조 시간"];
+                [self.currentInfo setValue:item[@"tilevel"] forKey:@"만조 수위"];
             }
             
         }
@@ -142,8 +145,8 @@
     [self fetchDataWithParam:params endpoint:GetSunInfoBeach Completion:^(NSMutableDictionary * result) {
         result = result[@"response"][@"body"][@"items"][@"item"][0];
         
-        [self.info setValue:result[@"sunrise"] forKey:@"일출 시간"];
-        [self.info setValue:result[@"sunset"] forKey:@"일몰 시간"];
+        [self.currentInfo setValue:result[@"sunrise"] forKey:@"일출 시간"];
+        [self.currentInfo setValue:result[@"sunset"] forKey:@"일몰 시간"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -214,10 +217,10 @@
     if (indexPath.section == 0) {cell.titleLabel.text = currentDateString;
         cell.contentLabel.text = @"";
     } else if (indexPath.section == 1){
-        NSArray *sortedKeys = [self.info.allKeys sortedArrayUsingSelector:@selector(compare:)];
+        NSArray *sortedKeys = [self.currentInfo.allKeys sortedArrayUsingSelector:@selector(compare:)];
         
         cell.titleLabel.text = sortedKeys[indexPath.row];
-        cell.contentLabel.text = [self.info objectForKey:sortedKeys[indexPath.row]];
+        cell.contentLabel.text = [self.currentInfo objectForKey:sortedKeys[indexPath.row]];
     } else {
         cell.titleLabel.text = @"setset";
         cell.contentLabel.text = @"test";
@@ -229,9 +232,9 @@
     if (section == 0) {
         return 1;
     } else if (section == 1) {
-        return [self.info count];
+        return [self.currentInfo count];
     } else {
-        return 5;
+        return [self.forecastInfo count];
     }
 }
 
