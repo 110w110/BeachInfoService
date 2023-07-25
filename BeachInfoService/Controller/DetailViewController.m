@@ -20,6 +20,8 @@
 
 @property (nonatomic) NSString * baseDate;
 
+@property (nonatomic) NSString * baseTime;
+
 @property (nonatomic) NSString * searchTime;
 
 @end
@@ -39,6 +41,7 @@
     [self fetchGetWhBuoyBeachData];
     [self fetchGetTideInfoBuoyBeachData];
     [self fetchGetSunInfoBuoyBeachData];
+    [self fetchGetUltraFcstBeachData];
 }
 
 - (instancetype)initWithBeach:(Beach *)beach {
@@ -56,6 +59,8 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyyMMdd"];
     self.baseDate = [formatter stringFromDate:[NSDate date]];
+    [formatter setDateFormat:@"HHmm"];
+    self.baseTime = [formatter stringFromDate:[NSDate date]];
     [formatter setDateFormat:@"yyyyMMddHHmm"];
     self.searchTime = [formatter stringFromDate:[NSDate date]];
 }
@@ -64,7 +69,7 @@
     self.title = [_beach beachName];
     [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
     
-    self.tableView = [UITableView new];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleInsetGrouped];
     [_tableView registerNib:[UINib nibWithNibName:@"InfoCell" bundle:nil] forCellReuseIdentifier:@"InfoCell"];
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -85,7 +90,7 @@
     [params setObject:_searchTime forKey:@"searchTime"];
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetTwBuoyBeach Completion:^(NSMutableDictionary * result) {
-        result = result[@"item"][0];
+        result = result[@"response"][@"body"][@"items"][@"item"][0];
         [self.info setValue:result[@"tw"] forKey:@"현재 수온"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -99,7 +104,7 @@
     [params setObject:_searchTime forKey:@"searchTime"];
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetWhBuoyBeach Completion:^(NSMutableDictionary * result) {
-        result = result[@"item"][0];
+        result = result[@"response"][@"body"][@"items"][@"item"][0];
         [self.info setValue:result[@"wh"] forKey:@"현재 파고"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -113,7 +118,7 @@
     [params setObject:_baseDate forKey:@"base_date"];
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetTideInfoBeach Completion:^(NSMutableDictionary * result) {
-        for (NSMutableDictionary * item in result[@"item"]) {
+        for (NSMutableDictionary * item in result[@"response"][@"body"][@"items"][@"item"]) {
             if ([item[@"tiType"]  isEqual: @"ET1"]) {
                 [self.info setValue:item[@"tiTime"] forKey:@"간조 시간"];
                 [self.info setValue:item[@"tilevel"] forKey:@"간조 수위"];
@@ -135,11 +140,38 @@
     [params setObject:_baseDate forKey:@"base_date"];
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetSunInfoBeach Completion:^(NSMutableDictionary * result) {
-        NSLog(@"%@", result[@"item"][0]);
-        result = result[@"item"][0];
+        result = result[@"response"][@"body"][@"items"][@"item"][0];
         
         [self.info setValue:result[@"sunrise"] forKey:@"일출 시간"];
         [self.info setValue:result[@"sunset"] forKey:@"일몰 시간"];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }];
+}
+
+- (void)fetchGetUltraFcstBeachData {
+    NSMutableDictionary *params = [self.defaultParams mutableCopy];
+    [params setObject:_baseDate forKey:@"base_date"];
+    [params setObject:@"1100" forKey:@"base_time"];
+    [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
+    [self fetchDataWithParam:params endpoint:GetVilageFcstBeach Completion:^(NSMutableDictionary * result) {
+//        for (NSMutableDictionary * item in result[@"response"][@"body"][@"items"][@"item"]) {
+//
+//            if ([item[@"category"]  isEqual: @"TMP"]) {
+//                [self.info setValue:item[@"fcstValue"] forKey:@"1시간 기온"];
+//            } else if ([item[@"category"]  isEqual: @"POP"]) {
+//                [self.info setValue:item[@"fcstValue"] forKey:@"강수 확률"];
+//            } else if ([item[@"category"]  isEqual: @"PCP"]) {
+//                [self.info setValue:item[@"fcstValue"] forKey:@"1시간 강수량"];
+//            } else if ([item[@"category"]  isEqual: @"POP"]) {
+//                [self.info setValue:item[@"fcstValue"] forKey:@"파고 예보"];
+//            } else if ([item[@"category"]  isEqual: @"POP"]) {
+//                [self.info setValue:item[@"fcstValue"] forKey:@"강수 확률"];
+//            }
+//
+//        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -160,7 +192,7 @@
                 NSLog(@"Http Request Exception [Response] :: %@", exception);
             }
             NSMutableDictionary * result = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            result = result[@"response"][@"body"][@"items"];
+//            result = result[@"response"][@"body"][@"items"];
             completion(result);
         } else {
             NSLog(@"failed to connect");
@@ -179,21 +211,42 @@
     [formatter setDateFormat:@"yyyy년 MM월 dd일 HH시 mm분 기준"];
     NSString *currentDateString = [formatter stringFromDate:[NSDate date]];
     
-    NSArray *sortedKeys = [self.info.allKeys sortedArrayUsingSelector:@selector(compare:)];
-    
-    if (indexPath.row == 0) {
-        cell.titleLabel.text = currentDateString;
+    if (indexPath.section == 0) {cell.titleLabel.text = currentDateString;
         cell.contentLabel.text = @"";
+    } else if (indexPath.section == 1){
+        NSArray *sortedKeys = [self.info.allKeys sortedArrayUsingSelector:@selector(compare:)];
+        
+        cell.titleLabel.text = sortedKeys[indexPath.row];
+        cell.contentLabel.text = [self.info objectForKey:sortedKeys[indexPath.row]];
     } else {
-        cell.titleLabel.text = sortedKeys[indexPath.row - 1];
-        cell.contentLabel.text = [self.info objectForKey:sortedKeys[indexPath.row - 1]];
+        cell.titleLabel.text = @"setset";
+        cell.contentLabel.text = @"test";
     }
-    
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.info count] + 1;
+    if (section == 0) {
+        return 1;
+    } else if (section == 1) {
+        return [self.info count];
+    } else {
+        return 5;
+    }
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 3;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return @"정보";
+    } else if (section == 1) {
+        return @"현재 상태정보";
+    } else {
+        return @"단기 예보";
+    }
 }
 
 @end
