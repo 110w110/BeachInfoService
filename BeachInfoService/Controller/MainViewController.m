@@ -17,18 +17,20 @@
 
 @property (nonatomic, strong) UITableView * tableView;
 
+@property (nonatomic, strong) UILabel * emptyLabel;
+
 @end
 
 @implementation MainViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self setUI];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self setEmptyLabel];
     [self.tableView reloadData];
 }
 
@@ -63,6 +65,27 @@
                                                                        action:@selector(showAddViewController)];
     [rightButtonItem setTintColor:[UIColor labelColor]];
     self.navigationItem.rightBarButtonItem = rightButtonItem;
+    
+    _emptyLabel = [UILabel new];
+    [_emptyLabel setText:@"상단의 버튼을 이용해서\n즐겨찾는 해수욕장을 추가해보세요 :)"];
+    _emptyLabel.numberOfLines = 2;
+    _emptyLabel.textAlignment = NSTextAlignmentCenter;
+    [_emptyLabel setHidden:YES];
+    [self.view addSubview:_emptyLabel];
+    _emptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[ [_emptyLabel.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+                                               [_emptyLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+                                               [_emptyLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+                                               [_emptyLabel.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
+                                               ]];
+}
+
+- (void)setEmptyLabel {
+    if ([[[DataManager shared] selectedBeachList] count] == 0) {
+        [_emptyLabel setHidden:NO];
+    } else {
+        [_emptyLabel setHidden:YES];
+    }
 }
 
 - (void)showAddViewController {
@@ -96,6 +119,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [[DataManager shared] removeItem:indexPath.row];
+        [self setEmptyLabel];
         [self.tableView reloadData];
     }
 }
