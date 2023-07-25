@@ -18,7 +18,9 @@
 
 @property (nonatomic, strong) NSMutableDictionary * defaultParams;
 
-@property (nonatomic) NSString * currentDate;
+@property (nonatomic) NSString * baseDate;
+
+@property (nonatomic) NSString * searchTime;
 
 @end
 
@@ -35,6 +37,7 @@
     
     [self fetchGetTwBuoyBeachData];
     [self fetchGetWhBuoyBeachData];
+    [self fetchGetTideInfoBuoyBeachData];
 }
 
 - (instancetype)initWithBeach:(Beach *)beach {
@@ -50,8 +53,10 @@
 
 - (void)setCurrentDate {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyyMMdd"];
+    self.baseDate = [formatter stringFromDate:[NSDate date]];
     [formatter setDateFormat:@"yyyyMMddHHmm"];
-    self.currentDate = [formatter stringFromDate:[NSDate date]];
+    self.searchTime = [formatter stringFromDate:[NSDate date]];
 }
 
 - (void)setUI {
@@ -75,8 +80,8 @@
 
 - (void)fetchGetTwBuoyBeachData {
     NSMutableDictionary *params = [self.defaultParams mutableCopy];
-    [params setObject:@"20230724" forKey:@"base_date"];
-    [params setObject:_currentDate forKey:@"searchTime"];
+    [params setObject:_baseDate forKey:@"base_date"];
+    [params setObject:_searchTime forKey:@"searchTime"];
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetTwBuoyBeach Completion:^(NSMutableDictionary * result) {
         result = result[@"item"][0];
@@ -91,13 +96,39 @@
 
 - (void)fetchGetWhBuoyBeachData {
     NSMutableDictionary *params = [self.defaultParams mutableCopy];
-    [params setObject:_currentDate forKey:@"searchTime"];
+    [params setObject:_searchTime forKey:@"searchTime"];
     [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
     [self fetchDataWithParam:params endpoint:GetWhBuoyBeach Completion:^(NSMutableDictionary * result) {
         result = result[@"item"][0];
         NSLog(@"%@", result);
         
         [self.info setValue:result[@"wh"] forKey:@"현재 파고"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }];
+}
+
+- (void)fetchGetTideInfoBuoyBeachData {
+    NSMutableDictionary *params = [self.defaultParams mutableCopy];
+    [params setObject:_baseDate forKey:@"base_date"];
+    [params setObject:[NSString stringWithFormat:@"%d", [_beach beachNum]] forKey:@"beach_num"];
+    [self fetchDataWithParam:params endpoint:GetTideInfoBeach Completion:^(NSMutableDictionary * result) {
+//        result = result[@"item"][0];
+        NSLog(@"%@", result);
+        
+        for (NSMutableDictionary * item in result[@"item"]) {
+            NSLog(@"%@", item[@"tiType"]);
+            if ([item[@"tiType"]  isEqual: @"ET1"]) {
+                [self.info setValue:item[@"tiTime"] forKey:@"간조 시간"];
+                [self.info setValue:item[@"tilevel"] forKey:@"간조 수위"];
+            } else if ([item[@"tiType"]  isEqual: @"FT1"]) {
+                [self.info setValue:item[@"tiTime"] forKey:@"만조 시간"];
+                [self.info setValue:item[@"tilevel"] forKey:@"만조 수위"];
+            }
+            
+        }
+//        [self.info setValue:result[@"wh"] forKey:@"현재 파고"];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
@@ -137,24 +168,32 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy년 MM월 dd일 HH시 mm분 기준"];
     NSString *currentDateString = [formatter stringFromDate:[NSDate date]];
-    switch (indexPath.row) {
-        case 0:
-            cell.titleLabel.text = currentDateString;
-            cell.contentLabel.text = @"";
-            break;
-        case 1:
-            cell.titleLabel.text = @"현재 수온";
-            cell.contentLabel.text = [self.info objectForKey:@"현재 수온"];
-            break;
-        case 2:
-            cell.titleLabel.text = @"현재 파고";
-            cell.contentLabel.text = [self.info objectForKey:@"현재 파고"];
-            break;
-        default:
-            cell.titleLabel.text = @"";
-            cell.contentLabel.text = [self.info objectForKey:@""];
-            break;
+    
+    if (indexPath.row == 0) {
+        cell.titleLabel.text = currentDateString;
+        cell.contentLabel.text = @"";
+    } else {
+        cell.titleLabel.text = [self.info allKeys][indexPath.row - 1];
+        cell.contentLabel.text = [self.info allValues][indexPath.row - 1];
     }
+//    switch (indexPath.row) {
+//        case 0:
+//            cell.titleLabel.text = currentDateString;
+//            cell.contentLabel.text = @"";
+//            break;
+//        case 1:
+//            cell.titleLabel.text = @"현재 수온";
+//            cell.contentLabel.text = [self.info objectForKey:@"현재 수온"];
+//            break;
+//        case 2:
+//            cell.titleLabel.text = @"현재 파고";
+//            cell.contentLabel.text = [self.info objectForKey:@"현재 파고"];
+//            break;
+//        default:
+//            cell.titleLabel.text = @"";
+//            cell.contentLabel.text = [self.info objectForKey:@""];
+//            break;
+//    }
     return cell;
 }
 
