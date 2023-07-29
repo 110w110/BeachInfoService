@@ -39,10 +39,9 @@
     self.title = @"BadaBoda";
     [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
     
-    [[self.navigationController navigationBar] setTintColor:[UIColor labelColor]];
     UINavigationBarAppearance * appearance = [UINavigationBarAppearance new];
     [appearance configureWithDefaultBackground];
-    [appearance setBackgroundColor:[UIColor systemBlueColor]];
+    [appearance setBackgroundColor:[UIColor colorWithRed:(110/255.0) green:(176/255.0) blue:(250/255.0) alpha:1.0]];
     [[[self navigationController] navigationBar] setStandardAppearance:appearance];
     [[[self navigationController] navigationBar] setScrollEdgeAppearance:appearance];
     

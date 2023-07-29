@@ -74,6 +74,7 @@
     self.title = [_beach beachName];
     [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
     
+    [[self.navigationController navigationBar] setTintColor:[UIColor labelColor]];
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleInsetGrouped];
     [_tableView registerNib:[UINib nibWithNibName:@"InfoCell" bundle:nil] forCellReuseIdentifier:@"InfoCell"];
     _tableView.dataSource = self;
